@@ -1,6 +1,7 @@
 package com.example.listdetails.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -9,50 +10,59 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "mortgage_programs")
+@Table(name = "mortgage_program")
 public class MortgageProgram {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String programName;
     private String description;
-    private Double maxLoan;
     private Double interestRate;
+    private Double maxLoanAmount;
+    private Integer termYears;
+    private Boolean active;
 
-    // Links each mortgage program back to its state housing agency
-    @ManyToOne
-    @JoinColumn(name = "state_id", nullable = false)
-    private StateHousingSupport state;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "state_housing_support_id", nullable = false)
+    private StateHousingSupport stateHousingSupport;
 
-    // --- Constructors ---
     public MortgageProgram() {}
 
-    public MortgageProgram(String programName, String description, Double maxLoan, Double interestRate, StateHousingSupport state) {
+    public MortgageProgram(Long id,
+            StateHousingSupport stateHousingSupport,
+            String programName,
+            String description,
+            Double interestRate,
+            Double maxLoanAmount,
+            Integer termYears,
+            Boolean active) {
+        this.id = id;
+        this.stateHousingSupport = stateHousingSupport;
         this.programName = programName;
         this.description = description;
-        this.maxLoan = maxLoan;
         this.interestRate = interestRate;
-        this.state = state;
+        this.maxLoanAmount = maxLoanAmount;
+        this.termYears = termYears;
+        this.active = active;
     }
 
-    // --- Getters and Setters ---
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
     public String getProgramName() { return programName; }
-    public void setProgramName(String programName) { this.programName = programName; }
-
     public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-
-    public Double getMaxLoan() { return maxLoan; }
-    public void setMaxLoan(Double maxLoan) { this.maxLoan = maxLoan; }
-
     public Double getInterestRate() { return interestRate; }
-    public void setInterestRate(Double interestRate) { this.interestRate = interestRate; }
+    public Double getMaxLoanAmount() { return maxLoanAmount; }
+    public Integer getTermYears() { return termYears; }
+    public Boolean getActive() { return active; }
+    public StateHousingSupport getStateHousingSupport() { return stateHousingSupport; }
 
-    public StateHousingSupport getState() { return state; }
-    public void setState(StateHousingSupport state) { this.state = state; }
+    public void setProgramName(String programName) { this.programName = programName; }
+    public void setDescription(String description) { this.description = description; }
+    public void setInterestRate(Double interestRate) { this.interestRate = interestRate; }
+    public void setMaxLoanAmount(Double maxLoanAmount) { this.maxLoanAmount = maxLoanAmount; }
+    public void setTermYears(Integer termYears) { this.termYears = termYears; }
+    public void setActive(Boolean active) { this.active = active; }
+    public void setStateHousingSupport(StateHousingSupport stateHousingSupport) {
+        this.stateHousingSupport = stateHousingSupport;
+    }
 }

@@ -2,7 +2,7 @@ package com.example.listdetails.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,73 +12,70 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.listdetails.model.MortgageProgram;
-import com.example.listdetails.model.StateHousingSupport;
-import com.example.listdetails.repository.MortgageProgramRepository;
-import com.example.listdetails.repository.StateHousingSupportRepository;
- 
+import com.example.listdetails.dto.MortgageProgramDetailDTO;
+import com.example.listdetails.dto.MortgageProgramListDTO;
+import com.example.listdetails.service.MortgageProgramService;
+
 @RestController
-@RequestMapping("/programs")
+@RequestMapping("/api/mortgage-programs")
+@CrossOrigin(origins = "*")
 public class MortgageProgramController {
- 
-    @Autowired
-    private MortgageProgramRepository programRepo;
- 
-    @Autowired
-    private StateHousingSupportRepository stateRepo;
- 
+
+    private final MortgageProgramService service;
+
+    public MortgageProgramController(MortgageProgramService service) {
+        this.service = service;
+    }
+
+    // ---------------------------------------------------------
     // GET all mortgage programs
-    // curl http://localhost:8080/programs
+    // ---------------------------------------------------------
     @GetMapping
-    public List<MortgageProgram> getAll() {
-        return programRepo.findAll();
+    public List<MortgageProgramListDTO> getAll() {
+        return service.getAll();
     }
- 
-    // GET one mortgage program by id
-    // curl http://localhost:8080/programs/1
+
+    // ---------------------------------------------------------
+    // GET mortgage programs by state
+    // Example: /api/mortgage-programs/state/1
+    // ---------------------------------------------------------
+    @GetMapping("/state/{stateId}")
+    public List<MortgageProgramListDTO> getByState(@PathVariable Long stateId) {
+        return service.getByState(stateId);
+    }
+
+    // ---------------------------------------------------------
+    // GET a single mortgage program by ID
+    // ---------------------------------------------------------
     @GetMapping("/{id}")
-    public MortgageProgram getOne(@PathVariable Long id) {
-        return programRepo.findById(id).orElseThrow();
+    public MortgageProgramDetailDTO getOne(@PathVariable Long id) {
+        return service.getOne(id);
     }
- 
-    // POST - add a new mortgage program
-    // curl -X POST http://localhost:8080/programs \
-    //   -H "Content-Type: application/json" \
-    //   -d '{"programName":"New Program","description":"Details here","maxLoan":400000,"interestRate":6.25,"state":{"id":1}}'
-    @PostMapping
-    public MortgageProgram create(@RequestBody MortgageProgram program) {
-        StateHousingSupport state = stateRepo
-            .findById(program.getState().getId())
-            .orElseThrow();
-        program.setState(state);
-        return programRepo.save(program);
+
+    // ---------------------------------------------------------
+    // CREATE a mortgage program under a specific state
+    // Example: POST /api/mortgage-programs/state/1
+    // ---------------------------------------------------------
+    @PostMapping("/state/{stateId}")
+    public MortgageProgramDetailDTO create(@PathVariable Long stateId,
+                                           @RequestBody MortgageProgramDetailDTO dto) {
+        return service.create(stateId, dto);
     }
- 
-    // PUT - update an existing mortgage program
-    // curl -X PUT http://localhost:8080/programs/1 \
-    //   -H "Content-Type: application/json" \
-    //   -d '{"programName":"Updated Name","description":"New details","maxLoan":500000,"interestRate":6.10,"state":{"id":1}}'
+
+    // ---------------------------------------------------------
+    // UPDATE a mortgage program
+    // ---------------------------------------------------------
     @PutMapping("/{id}")
-    public MortgageProgram update(@PathVariable Long id, @RequestBody MortgageProgram updated) {
-        MortgageProgram existing = programRepo.findById(id).orElseThrow();
-        existing.setProgramName(updated.getProgramName());
-        existing.setDescription(updated.getDescription());
-        existing.setMaxLoan(updated.getMaxLoan());
-        existing.setInterestRate(updated.getInterestRate());
- 
-        StateHousingSupport state = stateRepo
-            .findById(updated.getState().getId())
-            .orElseThrow();
-        existing.setState(state);
- 
-        return programRepo.save(existing);
+    public MortgageProgramDetailDTO update(@PathVariable Long id,
+                                           @RequestBody MortgageProgramDetailDTO dto) {
+        return service.update(id, dto);
     }
- 
-    // DELETE - remove a mortgage program
-    // curl -X DELETE http://localhost:8080/programs/1
+
+    // ---------------------------------------------------------
+    // DELETE a mortgage program
+    // ---------------------------------------------------------
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id) {
-        programRepo.deleteById(id);
-        return "Mortgage program " + id + " deleted.";
+    public void delete(@PathVariable Long id) {
+        service.delete(id);
     }
 }

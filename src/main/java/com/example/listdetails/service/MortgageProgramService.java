@@ -15,75 +15,69 @@ import com.example.listdetails.repository.StateHousingSupportRepository;
 @Service
 public class MortgageProgramService {
 
-    private final MortgageProgramRepository repo;
-    private final StateHousingSupportRepository stateRepo;
+    private final MortgageProgramRepository repository;
+    private final StateHousingSupportRepository stateRepository;
 
-    public MortgageProgramService(MortgageProgramRepository repo,
-                                  StateHousingSupportRepository stateRepo) {
-        this.repo = repo;
-        this.stateRepo = stateRepo;
+    public MortgageProgramService(MortgageProgramRepository repository,
+                                  StateHousingSupportRepository stateRepository) {
+        this.repository = repository;
+        this.stateRepository = stateRepository;
     }
 
-    // GET all mortgage programs
     public List<MortgageProgramListDTO> getAll() {
-        return repo.findAll()
+        return repository.findAll()
                 .stream()
                 .map(this::toListDTO)
                 .collect(Collectors.toList());
     }
 
-    // GET all mortgage programs for a specific state
     public List<MortgageProgramListDTO> getByState(Long stateId) {
-        return repo.findAll()
+        return repository.findByStateHousingSupportId(stateId)
                 .stream()
-                .filter(mp -> mp.getState().getId().equals(stateId))
                 .map(this::toListDTO)
                 .collect(Collectors.toList());
     }
 
-    // GET one mortgage program by id
     public MortgageProgramDetailDTO getOne(Long id) {
-        MortgageProgram mp = repo.findById(id).orElseThrow();
+        MortgageProgram mp = repository.findById(id).orElseThrow();
         return toDetailDTO(mp);
     }
 
-    // CREATE a mortgage program
     public MortgageProgramDetailDTO create(Long stateId, MortgageProgramDetailDTO dto) {
-        StateHousingSupport state = stateRepo.findById(stateId).orElseThrow();
+        StateHousingSupport state = stateRepository.findById(stateId).orElseThrow();
 
         MortgageProgram mp = new MortgageProgram(
+                null,
+                state,
                 dto.getProgramName(),
                 dto.getDescription(),
-                dto.getMaxLoan(),
                 dto.getInterestRate(),
-                state
+                dto.getMaxLoanAmount(),
+                dto.getTermYears(),
+                dto.getActive()
         );
 
-        MortgageProgram saved = repo.save(mp);
+        MortgageProgram saved = repository.save(mp);
         return toDetailDTO(saved);
     }
 
-    // UPDATE a mortgage program
     public MortgageProgramDetailDTO update(Long id, MortgageProgramDetailDTO dto) {
-        MortgageProgram existing = repo.findById(id).orElseThrow();
+        MortgageProgram existing = repository.findById(id).orElseThrow();
 
         existing.setProgramName(dto.getProgramName());
         existing.setDescription(dto.getDescription());
-        existing.setMaxLoan(dto.getMaxLoan());
         existing.setInterestRate(dto.getInterestRate());
+        existing.setMaxLoanAmount(dto.getMaxLoanAmount());
+        existing.setTermYears(dto.getTermYears());
+        existing.setActive(dto.getActive());
 
-        MortgageProgram saved = repo.save(existing);
+        MortgageProgram saved = repository.save(existing);
         return toDetailDTO(saved);
     }
 
-    // DELETE a mortgage program
     public void delete(Long id) {
-        repo.deleteById(id);
+        repository.deleteById(id);
     }
-
-    // ----------------------
-    // DTO MAPPERS
-    // ----------------------
 
     private MortgageProgramListDTO toListDTO(MortgageProgram mp) {
         return new MortgageProgramListDTO(
@@ -96,11 +90,14 @@ public class MortgageProgramService {
     private MortgageProgramDetailDTO toDetailDTO(MortgageProgram mp) {
         return new MortgageProgramDetailDTO(
                 mp.getId(),
-                mp.getState().getId(),
+                mp.getStateHousingSupport().getId(),
+                mp.getStateHousingSupport().getStateName(),
                 mp.getProgramName(),
                 mp.getDescription(),
-                mp.getMaxLoan(),
-                mp.getInterestRate()
+                mp.getInterestRate(),
+                mp.getMaxLoanAmount(),
+                mp.getTermYears(),
+                mp.getActive()
         );
     }
 }

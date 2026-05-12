@@ -26,29 +26,47 @@ public class StateHousingSupportService {
                 .collect(Collectors.toList());
     }
 
-    private StateHousingSupportListDTO toListDTO(StateHousingSupport entity) {
-    return new StateHousingSupportListDTO(
-        entity.getId(),
-        entity.getStateName(),
-        entity.getAgencyName()
-    );
+    public StateHousingSupportDetailDTO getById(Long id) {
+        StateHousingSupport state = repository.findById(id).orElseThrow();
+        return toDetailDTO(state);
     }
 
-public StateHousingSupportDetailDTO getById(Long id) {
-    StateHousingSupport s = repository.findById(id).orElseThrow();
-    return new StateHousingSupportDetailDTO(
-        s.getId(),
-        s.getStateName(),
-        s.getAgencyName(),
-        s.getWebsite(),
-        s.getPhone());
-}
+    public StateHousingSupportDetailDTO create(StateHousingSupport state) {
+        StateHousingSupport saved = repository.save(state);
+        return toDetailDTO(saved);
+    }
 
-public StateHousingSupport save(StateHousingSupport state) {
-    return repository.save(state);
-}
+    public StateHousingSupportDetailDTO update(Long id, StateHousingSupport updated) {
+        StateHousingSupport existing = repository.findById(id).orElseThrow();
 
-public void delete(Long id) {
-    repository.deleteById(id);
-}
+        existing.setStateName(updated.getStateName());
+        existing.setAgencyName(updated.getAgencyName());
+        existing.setWebsite(updated.getWebsite());
+        existing.setPhone(updated.getPhone());
+
+        StateHousingSupport saved = repository.save(existing);
+        return toDetailDTO(saved);
+    }
+
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
+
+    private StateHousingSupportListDTO toListDTO(StateHousingSupport s) {
+        return new StateHousingSupportListDTO(
+                s.getId(),
+                s.getStateName(),
+                s.getAgencyName()
+        );
+    }
+
+    private StateHousingSupportDetailDTO toDetailDTO(StateHousingSupport s) {
+        return new StateHousingSupportDetailDTO(
+                s.getId(),
+                s.getStateName(),
+                s.getAgencyName(),
+                s.getWebsite(),
+                s.getPhone()
+        );
+    }
 }
