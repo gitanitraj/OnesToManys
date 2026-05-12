@@ -3,34 +3,32 @@ package com.example.listdetails.dto;
 public class MortgageProgramDetailDTO {
 
     private Long id;
-    private Long stateHousingSupportId;
+    private Long stateId;
     private String programName;
+    private String description;
+    private Double maxLoan;
     private Double interestRate;
-    private Double maxLoanAmount;
-    private Integer termYears;
-    private Boolean active;
 
-    // getters and setters
     public MortgageProgramDetailDTO() {}
 
-    public Long getID() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public MortgageProgramDetailDTO(Long id,
+                                    Long stateId,
+                                    String programName,
+                                    String description,
+                                    Double maxLoan,
+                                    Double interestRate) {
+        this.id = id;
+        this.stateId = stateId;
+        this.programName = programName;
+        this.description = description;
+        this.maxLoan = maxLoan;
+        this.interestRate = interestRate;
+    }
 
-    public Long getStateHousingSupportId() { return stateHousingSupportId; }
-    public void setStateHousingSupportId(Long stateHousingSupportId) { this.stateHousingSupportId = stateHousingSupportId; }
-
+    public Long getId() { return id; }
+    public Long getStateId() { return stateId; }
     public String getProgramName() { return programName; }
-    public void setProgramName(String programName) { this.programName = programName; }
-
+    public String getDescription() { return description; }
+    public Double getMaxLoan() { return maxLoan; }
     public Double getInterestRate() { return interestRate; }
-    public void setInterestRate(Double interestRate) { this.interestRate = interestRate; }
-
-    public Double getMaxLoanAmount() { return maxLoanAmount; }
-    public void setMaxLoanAmount(Double maxLoanAmount) { this.maxLoanAmount = maxLoanAmount; }
-
-    public Integer getTermYears() { return termYears; }
-    public void setTermYears(Integer termYears) { this.termYears = termYears; }
-
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
 }
