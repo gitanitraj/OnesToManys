@@ -1,36 +1,37 @@
 -- ============================================
--- ListDetails Project: Product Category / Products
+-- ListDetails Project: State Housing Support / Mortgage Programs
 -- Schema File
 -- ============================================
 
--- Start fresh each time (for development/testing)
 DROP DATABASE IF EXISTS listdetails_db;
 CREATE DATABASE listdetails_db;
 USE listdetails_db;
 
 -- -----------------------------------------------
--- MASTER TABLE: product_categories
--- Think of this like a folder that holds products
+-- MASTER TABLE: state_housing_support
+-- Each row is a state housing agency
 -- -----------------------------------------------
-CREATE TABLE product_categories (
-    id          INT AUTO_INCREMENT PRIMARY KEY,
-    name        VARCHAR(100)  NOT NULL,
-    description VARCHAR(255)
+CREATE TABLE state_housing_support (
+    id           INT AUTO_INCREMENT PRIMARY KEY,
+    state_name   VARCHAR(100) NOT NULL,
+    agency_name  VARCHAR(255) NOT NULL,
+    website      VARCHAR(255),
+    phone        VARCHAR(20)
 );
 
 -- -----------------------------------------------
--- DETAIL TABLE: products
--- Each product belongs to one category (via category_id)
--- category_id is the "string" connecting it to its folder
+-- DETAIL TABLE: mortgage_programs
+-- Each program belongs to one state housing agency
+-- state_id is the foreign key linking it to master
 -- -----------------------------------------------
-CREATE TABLE products (
-    id          INT AUTO_INCREMENT PRIMARY KEY,
-    name        VARCHAR(100)  NOT NULL,
-    description VARCHAR(255),
-    price       DECIMAL(10, 2) NOT NULL,
-    category_id INT NOT NULL,
+CREATE TABLE mortgage_programs (
+    id            INT AUTO_INCREMENT PRIMARY KEY,
+    program_name  VARCHAR(255) NOT NULL,
+    description   VARCHAR(500),
+    max_loan      DECIMAL(12, 2),
+    interest_rate DECIMAL(5, 2),
+    state_id      INT NOT NULL,
 
-    -- This foreign key links each product to its category
-    FOREIGN KEY (category_id) REFERENCES product_categories(id)
+    FOREIGN KEY (state_id) REFERENCES state_housing_support(id)
         ON DELETE CASCADE
 );
