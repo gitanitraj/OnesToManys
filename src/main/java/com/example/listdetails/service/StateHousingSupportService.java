@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.example.listdetails.dto.StateHousingSupportDetailDTO;
 import com.example.listdetails.dto.StateHousingSupportListDTO;
 import com.example.listdetails.model.StateHousingSupport;
 import com.example.listdetails.repository.StateHousingSupportRepository;
@@ -33,4 +34,21 @@ public class StateHousingSupportService {
     );
     }
 
+public StateHousingSupportDetailDTO getById(Long id) {
+    StateHousingSupport s = repository.findById(id).orElseThrow();
+    return new StateHousingSupportDetailDTO(
+        s.getId(),
+        s.getStateName(),
+        s.getAgencyName(),
+        s.getWebsite(),
+        s.getPhone());
+}
+
+public StateHousingSupport save(StateHousingSupport state) {
+    return repository.save(state);
+}
+
+public void delete(Long id) {
+    repository.deleteById(id);
+}
 }
