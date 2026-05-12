@@ -14,5 +14,4 @@ public class MortgageProgramListDTO {
     public Long getId() { return id; }
     public String getProgramName() { return programName; }
     public Double getInterestRate() { return interestRate; }
-    
 }
