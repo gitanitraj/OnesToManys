@@ -3,8 +3,6 @@
 -- Synthetic Sample Data — Run this AFTER schema.sql
 -- ============================================
 
-USE listdetails_db;
-
 -- -----------------------------------------------
 -- Seed data for MASTER table: state_housing_support
 -- -----------------------------------------------
