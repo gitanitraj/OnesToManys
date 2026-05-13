@@ -3,10 +3,6 @@
 -- Schema File
 -- ============================================
  
-DROP DATABASE IF EXISTS listdetails_db;
-CREATE DATABASE listdetails_db;
-USE listdetails_db;
- 
 -- -----------------------------------------------
 -- MASTER TABLE: state_housing_support
 -- Each row is a state housing agency
