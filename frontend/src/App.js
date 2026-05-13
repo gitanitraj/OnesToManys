@@ -1,6 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
 
+import ProgramList from "./components/ProgramList";
+import ProgramDetail from "./components/ProgramDetail";
+import ProgramForm from "./components/ProgramForm";
+
+
 function App() {
   return (
     <div className="App">
