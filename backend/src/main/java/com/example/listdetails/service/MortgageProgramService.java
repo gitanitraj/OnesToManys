@@ -80,12 +80,18 @@ public class MortgageProgramService {
     }
 
     private MortgageProgramListDTO toListDTO(MortgageProgram mp) {
-        return new MortgageProgramListDTO(
-                mp.getId(),
-                mp.getProgramName(),
-                mp.getInterestRate()
-        );
-    }
+    return new MortgageProgramListDTO(
+        mp.getId(),
+        mp.getProgramName(),
+        mp.getDescription(),
+        mp.getInterestRate(),
+        mp.getMaxLoanAmount(),
+        mp.getTermYears(),
+        mp.getActive(),
+        mp.getStateHousingSupport().getId(),
+        mp.getStateHousingSupport().getStateName()
+    );
+}
 
     private MortgageProgramDetailDTO toDetailDTO(MortgageProgram mp) {
         return new MortgageProgramDetailDTO(

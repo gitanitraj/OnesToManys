@@ -7,8 +7,8 @@ public class MortgageProgramDetailDTO {
     private String stateName;
     private String programName;
     private String description;
-    private Double maxLoanAmount;
     private Double interestRate;
+    private Double maxLoanAmount;
     private Integer termYears;
     private Boolean active;
 
@@ -19,8 +19,8 @@ public class MortgageProgramDetailDTO {
                                     String stateName,
                                     String programName,
                                     String description,
-                                    Double maxLoanAmount,
                                     Double interestRate,
+                                    Double maxLoanAmount,
                                     Integer termYears,
                                     Boolean active) {
         this.id = id;
@@ -28,8 +28,8 @@ public class MortgageProgramDetailDTO {
         this.stateName = stateName;
         this.programName = programName;
         this.description = description;
-        this.maxLoanAmount = maxLoanAmount;
         this.interestRate = interestRate;
+        this.maxLoanAmount = maxLoanAmount;
         this.termYears = termYears;
         this.active = active;
     }

@@ -23,7 +23,7 @@ public class MortgageProgram {
     private Integer termYears;
     private Boolean active;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "state_housing_support_id", nullable = false)
     private StateHousingSupport stateHousingSupport;
 
