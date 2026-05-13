@@ -5,6 +5,8 @@ public class MortgageProgramListDTO {
     private String programName;
     private Double interestRate;
 
+    public MortgageProgramListDTO() {}
+
     public MortgageProgramListDTO(Long id, String programName, Double interestRate) {
         this.id = id;
         this.programName = programName;
